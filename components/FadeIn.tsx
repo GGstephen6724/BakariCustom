@@ -1,23 +1,44 @@
-// components/FadeIn.tsx
 "use client";
 
-import { ReactNode } from "react";
-import { motion } from "framer-motion";
+import { ReactNode, useEffect, useRef, useState } from "react";
 
-interface FadeInProps {
+type FadeInProps = {
   children: ReactNode;
-  delay?: number; // optional stagger delay
-}
+  className?: string;
+};
 
-export default function FadeIn({ children, delay = 0 }: FadeInProps) {
+export default function FadeIn({ children, className = "" }: FadeInProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target); // stop observing after it becomes visible
+        }
+      },
+      {
+        threshold: 0.1, // triggers when 10% of section is visible
+      }
+    );
+
+    if (ref.current) observer.observe(ref.current);
+
+    return () => {
+      if (ref.current) observer.unobserve(ref.current);
+    };
+  }, []);
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }} // triggers when 20% of section is visible
-      transition={{ duration: 0.8, delay }}
+    <div
+      ref={ref}
+      className={`${className} transition-opacity duration-3000 ease-out ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+      }`}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
