@@ -16,12 +16,10 @@ export default function FadeIn({ children, className = "" }: FadeInProps) {
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          observer.unobserve(entry.target); // stop observing after it becomes visible
+          observer.unobserve(entry.target); // stop after it becomes visible
         }
       },
-      {
-        threshold: 0.1, // triggers when 10% of section is visible
-      }
+      { threshold: 0.1 }
     );
 
     if (ref.current) observer.observe(ref.current);
@@ -34,7 +32,7 @@ export default function FadeIn({ children, className = "" }: FadeInProps) {
   return (
     <div
       ref={ref}
-      className={`${className} transition-opacity duration-3000 ease-out ${
+      className={`${className} transform transition-all duration-1000 ease-out ${
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
       }`}
     >
