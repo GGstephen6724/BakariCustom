@@ -16,23 +16,23 @@ export default function Home() {
 
   // Gallery images
   const galleryImages = [
-    "/image1.jpg",
-    "/image2.jpg",
-    "/image3.jpg",
-    "/image4.jpg",
-    "/image5.jpg",
-    "/image6.jpg",
-    "/image7.jpg",
-    "/image8.jpg",
+    "/image1.JPG",
+    "/image2.JPG",
+    "/image3.JPG",
+    "/image4.JPG",
+    "/image5.JPG",
+    "/image6.JPG",
+    "/image7.JPG",
+    "/image8.JPG",
   ];
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   // Deck of images state
   const images = [
     "/brownie.JPG",
-    "/cake.jpg",
-    "/bagels.jpg",
-    "/custom_cake.jpg",
+    "/cake.JPG",
+    "/bagels.JPG",
+    "/custom_cake.JPG",
   ];
   const [currentIndex, setCurrentIndex] = useState(0);
   const handleClick = () => {
@@ -160,7 +160,7 @@ export default function Home() {
       <div className="flex-1 flex flex-col items-center lg:items-end gap-6">
         <div className="flex flex-col sm:flex-row gap-4">
           <a
-            href="https://instagram.com/youraccount"
+            href="https://www.instagram.com/bakaricustom/"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transition"
@@ -246,7 +246,7 @@ export default function Home() {
     {/* Right: Social Links */}
     <div className="flex gap-6">
       {[
-        { name: "Instagram", href: "https://instagram.com/youraccount" },
+        { name: "Instagram", href: "https://www.instagram.com/bakaricustom/" },
         { name: "Email", href: "mailto:youremail@example.com" },
         { name: "Phone", href: "tel:+1234567890" },
       ].map((link) => (
