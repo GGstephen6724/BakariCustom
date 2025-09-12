@@ -2,11 +2,14 @@
   "name": "bakaricustom",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://github.com/ggstephen6724/BakariCustom",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "framer-motion": "^12.23.12",

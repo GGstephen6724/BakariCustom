@@ -2,7 +2,6 @@
 
 import { useState, useRef } from "react";
 import Navbar from "../../components/navbar";
-import Contact from "../../components/Contact";
 import FadeIn from "../../components/FadeIn";
 
 export default function Home() {
@@ -33,6 +32,7 @@ export default function Home() {
     "/cake.JPG",
     "/bagels.JPG",
     "/custom_cake.JPG",
+    "/tart.JPG",
   ];
   const [currentIndex, setCurrentIndex] = useState(0);
   const handleClick = () => {
@@ -48,15 +48,18 @@ export default function Home() {
         id="hero" 
         className="relative z-0 flex flex-col items-center justify-center text-center min-h-screen px-4 sm:px-6 lg:px-8">
         <video
-          ref={videoRef}
-          autoPlay
-          muted
-          className="fixed top-0 left-0 w-full h-full object-cover -z-10"
-          onEnded={handleVideoEnd}
-          key={currentVideoIndex}
-        >
-          <source src={videos[currentVideoIndex]} type="video/mp4" />
-        </video>
+        ref={videoRef}
+        autoPlay
+        muted
+        playsInline
+        disablePictureInPicture
+        controls={false}
+        onEnded={handleVideoEnd}
+        key={videos[currentVideoIndex]} // force re-render when source changes
+        className="fixed top-0 left-0 w-full h-full object-cover -z-10 pointer-events-none"
+      >
+        <source src={`/${videos[currentVideoIndex]}`} type="video/mp4" />
+      </video>
         <FadeIn>
           <div className="px-4 sm:px-6 py-8 sm:py-12 bg-white/20 backdrop-blur-md rounded-2xl max-w-xl sm:max-w-2xl">
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg mb-4">
@@ -75,72 +78,69 @@ export default function Home() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="relative z-10 flex flex-col-reverse sm:flex-row items-center justify-center text-left py-24 sm:py-32 px-4 sm:px-6 max-w-6xl mx-auto gap-8">
-        {/* Left: Deck of Images (stacked, corners peeking) */}
-    <div
-      className="w-full sm:w-1/2 flex justify-center sm:justify-start relative h-96 sm:h-[28rem] cursor-pointer"
-      onClick={handleClick}
-      aria-label="Image deck - click to cycle"
-    >
-  {images.map((img, index) => {
-    const totalImages = images.length;
-    // offsetIndex counts how many cards are behind the current card (0 = top card)
-    const offsetIndex = (index - currentIndex + totalImages) % totalImages;
-    const isTop = offsetIndex === 0;
+<section
+  id="about"
+  className="relative z-10 flex flex-col sm:flex-row items-start justify-center text-left py-24 sm:py-32 px-4 sm:px-6 max-w-6xl mx-auto gap-8"
+>
+  {/* Left: Deck of Images */}
+  <div
+    className="w-full sm:w-1/2 flex justify-center sm:justify-start relative h-64 sm:h-96 md:h-[28rem] lg:h-[32rem] cursor-pointer"
+    onClick={handleClick}
+    aria-label="Image deck - click to cycle"
+  >
+    {images.map((img, index) => {
+      const totalImages = images.length;
+      const offsetIndex = (index - currentIndex + totalImages) % totalImages;
+      const isTop = offsetIndex === 0;
 
-    // tweak these to change how much of the corners show / tilt amount
-    const cornerOffset = 18; // horizontal px offset per card
-    const yOffsetFactor = 0.5; // vertical offset is cornerOffset * yOffsetFactor
-    const rotationStep = 2.5; // degrees of rotation per offset (small)
+      const cornerOffset = 18; 
+      const yOffsetFactor = 0.5; 
+      const rotationStep = 2.5; 
 
-    // compute offsets
-    const x = offsetIndex * cornerOffset; // px to the right
-    const y = offsetIndex * cornerOffset * yOffsetFactor; // px down
-    const rotate = (offsetIndex - 1) * rotationStep; // slight tilt for behind cards
+      const x = offsetIndex * cornerOffset; 
+      const y = offsetIndex * cornerOffset * yOffsetFactor; 
+      const rotate = (offsetIndex - 1) * rotationStep; 
 
-    // stacking: higher zIndex for cards that should appear above others
-    const zIndex = totalImages - offsetIndex;
+      const zIndex = totalImages - offsetIndex;
+      const scale = isTop ? 1 : 0.96;
 
-    // scale slightly down for background cards
-    const scale = isTop ? 1 : 0.96;
+      return (
+        <img
+          key={img}
+          src={img}
+          alt={`Dessert ${index + 1}`}
+          className="absolute top-6 left-6 w-40 sm:w-56 md:w-64 lg:w-80 rounded-2xl shadow-xl transition-transform duration-300 will-change-transform"
+          style={{
+            transform: `translate(${x}px, ${y}px) scale(${scale}) rotate(${rotate}deg)`,
+            zIndex,
+            objectFit: "cover",
+          }}
+        />
+      );
+    })}
+  </div>
 
-    return (
-      <img
-        key={img}
-        src={img}
-        alt={`Dessert ${index + 1}`}
-        // responsive width + base styling kept in Tailwind
-        className="absolute top-6 left-6 w-56 sm:w-80 rounded-2xl shadow-xl transition-transform duration-300 will-change-transform"
-        style={{
-          transform: `translate(${x}px, ${y}px) scale(${scale}) rotate(${rotate}deg)`,
-          zIndex,
-          objectFit: "cover",
-        }}
-      />
-    );
-  })}
-</div>
+  {/* Right: Text */}
+  <div className="w-full sm:w-1/2 flex flex-col justify-center">
+    <FadeIn>
+      <div className="space-y-6">
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white drop-shadow-lg">
+          About Us
+        </h2>
+        <p className="text-base sm:text-lg lg:text-xl text-white/90 font-medium leading-relaxed drop-shadow-md">
+          At BakariCustom, we believe every sweet treat should be as unique as the person enjoying it. Our handcrafted desserts are made with love, creativity, and only the freshest ingredients, turning every bite into a moment to savor.
+        </p>
+        <p className="text-base sm:text-lg lg:text-xl text-white/90 font-medium leading-relaxed drop-shadow-md">
+          From decadent chocolate brownies to custom birthday and wedding cakes, every order is carefully crafted to match your vision. We specialize in bringing your dessert dreams to life, whether it’s a simple treat or a show-stopping centerpiece.
+        </p>
+        <p className="text-base sm:text-lg lg:text-xl text-white/90 font-medium leading-relaxed drop-shadow-md">
+          Baking isn’t just our craft — it’s our passion. Each dessert is baked fresh every Wednesday, ensuring you receive quality, flavor, and artistry in every creation. Your satisfaction is our priority, and we love making every occasion a little sweeter.
+        </p>
+      </div>
+    </FadeIn>
+  </div>
+</section>
 
-        {/* Right: Text */}
-        <div className="w-full sm:w-1/2">
-          <FadeIn>
-            <div className="space-y-6">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white drop-shadow-lg">
-                About Us
-              </h2>
-              <p className="text-base sm:text-lg lg:text-xl text-white/90 font-medium leading-relaxed drop-shadow-md">
-                At BakariCustom, we believe every sweet treat should be as unique as the person enjoying it. Our handcrafted desserts are made with love, creativity, and only the freshest ingredients, turning every bite into a moment to savor.
-              </p>
-              <p className="text-base sm:text-lg lg:text-xl text-white/90 font-medium leading-relaxed drop-shadow-md">
-                From decadent chocolate brownies to custom birthday and wedding cakes, every order is carefully crafted to match your vision. We specialize in bringing your dessert dreams to life, whether it’s a simple treat or a show-stopping centerpiece.
-              </p>
-              <p className="text-base sm:text-lg lg:text-xl text-white/90 font-medium leading-relaxed drop-shadow-md">
-                Baking isn’t just our craft — it’s our passion. Each dessert is baked fresh every Wednesday, ensuring you receive quality, flavor, and artistry in every creation. Your satisfaction is our priority, and we love making every occasion a little sweeter.
-              </p>
-            </div>
-          </FadeIn>
-        </div>
-      </section>
 
       {/* Contact Section */}
       <FadeIn>
