@@ -15,24 +15,24 @@ export default function Home() {
 
   // Gallery images
   const galleryImages = [
-    "/image1.JPG",
-    "/image2.JPG",
-    "/image3.JPG",
-    "/image4.JPG",
-    "/image5.JPG",
-    "/image6.JPG",
-    "/image7.JPG",
-    "/image8.JPG",
+    "/public/image1.JPG",
+    "/public/image2.JPG",
+    "/public/image3.JPG",
+    "/public/image4.JPG",
+    "/public/image5.JPG",
+    "/public/image6.JPG",
+    "/public/image7.JPG",
+    "/public/image8.JPG",
   ];
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   // Deck of images state
   const images = [
-    "/brownie.JPG",
-    "/cake.JPG",
-    "/bagels.JPG",
-    "/custom_cake.JPG",
-    "/tart.JPG",
+    "/public/brownie.JPG",
+    "/public/cake.JPG",
+    "/public/bagels.JPG",
+    "/public/custom_cake.JPG",
+    "/public/tart.JPG",
   ];
   const [currentIndex, setCurrentIndex] = useState(0);
   const handleClick = () => {
